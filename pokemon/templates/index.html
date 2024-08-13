@@ -1,0 +1,258 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8eaf6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        /* .container {
+            width: 90%;
+            max-width: 1200px;
+            background: linear-gradient(135deg, #ffffff, #b7b5b529);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin: 20px 0;
+            padding: 20px;
+        } */
+
+        .header {
+            text-align: center;
+            padding: 15px 0;
+            background: linear-gradient(135deg, #a6cdf457, #91b9dc);
+            color: #2c3e50;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 30px;
+            width: 90%;
+        }
+
+        .header h1 {
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            margin-top: -20px;
+        }
+
+        .header .logo-wrapper img {
+            width: 120px;
+            margin-right: 10px;
+        }
+
+        .header .search-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .search-wrap {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .header .search-icon,
+        .header .search-close-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .header .search-icon {
+            left: 10px;
+        }
+
+        .header .search-close-icon {
+            right: 10px;
+            display: none;
+        }
+
+        .header .search-input {
+            padding: 10px 40px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            width: 250px;
+        }
+
+        .header .filter-wrapper p {
+            margin: 0;
+            font-size: 15px;
+            color: #2c3e50;
+        }
+
+        .header .filter-wrap {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .filter-wrap div {
+            margin-right: 10px;
+        }
+
+        .header .filter-wrap label {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .pokemon-list {
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .list-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .list-item {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-align: center;
+            width: 150px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .list-item:hover {
+            transform: scale(1.05);
+        }
+
+        .number-wrap {
+            background-color: #ffcb05;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+        }
+
+        .number-wrap p {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .img-wrap img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .name-wrap p {
+            margin: 10px 0 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        #not-found-message {
+            display: none;
+            font-size: 20px;
+            color: #e74c3c;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header home">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="{% static 'assets/pokeball.png' %}" alt="pokeball">
+                <h1>Pokedex</h1>
+            </div>
+            <div class="search-wrapper">
+                <div class="search-wrap">
+                    <img src="{% static 'assets/search.svg' %}" alt="search icon" class="search-icon">
+                    <input type="text" class="search-input" placeholder="Search" id="search-input">
+                    <img src="{% static 'assets/cross.svg' %}" alt="cross icon" class="search-close-icon" id="search-close-icon">
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <section class="pokemon-list">
+            <div class="container">
+                <div class="list-wrapper" id="pokemon-list">
+                    {% for pokemon in pokemons %}
+                    <div class="list-item" onclick="window.location.href='{% url 'detail' pokemon.id %}'" data-name="{{ pokemon.name }}" data-id="{{ pokemon.id }}">
+                        <div class="number-wrap">
+                            <p>#{{ pokemon.id }}</p>
+                        </div>
+                        <div class="img-wrap">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/{{ pokemon.id }}.svg" alt="{{ pokemon.name }}">
+                        </div>
+                        <div class="name-wrap">
+                            <p>{{ pokemon.name|capfirst }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="not-found-message">Pokemon not found</div>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('search-input');
+            const searchCloseIcon = document.getElementById('search-close-icon');
+            const pokemonList = document.getElementById('pokemon-list');
+            const notFoundMessage = document.getElementById('not-found-message');
+            
+            searchInput.addEventListener('input', function () {
+                const searchTerm = searchInput.value.toLowerCase();
+                const items = pokemonList.getElementsByClassName('list-item');
+                let found = false;
+
+                Array.from(items).forEach(item => {
+                    const name = item.getAttribute('data-name').toLowerCase();
+                    const id = item.getAttribute('data-id');
+                    if (name.includes(searchTerm) || id.includes(searchTerm)) {
+                        item.style.display = '';
+                        found = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                notFoundMessage.style.display = found ? 'none' : 'block';
+                searchCloseIcon.style.display = searchTerm ? 'block' : 'none';
+            });
+
+            searchCloseIcon.addEventListener('click', function () {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+            });
+
+                items.forEach(item => pokemonList.appendChild(item));
+            });
+    </script>
+</body>
+
+</html>

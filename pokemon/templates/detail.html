@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pokemon.name|capfirst }}</title>
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8eaf6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .detail-main {
+            max-width: 900px;
+            width: 100%;
+            background: linear-gradient(135deg, #ffffff, #b7b5b529);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            position: relative;
+        }
+
+        .header-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .back-btn-wrap {
+            text-decoration: none;
+        }
+
+        .back-btn {
+            width: 24px;
+        }
+
+        .name-wrap {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .name {
+            font-size: 30px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #2c3e50;
+        }
+
+        .pokemon-id-wrap {
+            text-align: right;
+            color: #2c3e50;
+        }
+
+        .featured-img {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .arrow {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-img-wrapper img {
+            width: 200px;
+            height: auto;
+        }
+
+        .power-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .type {
+            background-color: #ddd;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .about-text {
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+
+        .pokemon-detail-wrapper {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .pokemon-detail-wrap {
+            text-align: center;
+        }
+
+        .pokemon-detail img {
+            width: 24px;
+            margin-bottom: 5px;
+        }
+
+        .caption-fonts {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .pokemon-description {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .stats-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stats-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress-bar {
+            width: 100%;
+            margin-left: 10px;
+        }
+
+        .detail-bg {
+            width: 100%;
+            opacity: 0.1;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="detail-main" id="main">
+        <header class="header" id="header">
+            <div class="header-wrapper">
+                <a href="{% url 'index' %}" class="back-btn-wrap">
+                    <img src="{% static 'assets/back-to-home.svg' %}" alt="back to home" class="back-btn" id="back-btn">
+                </a>
+                <div class="name-wrap">
+                    <h1 class="name">{{ pokemon.name|capfirst }}</h1>
+                </div>
+                <div class="pokemon-id-wrap">
+                    <p class="body2-fonts">#{{ pokemon.id }}</p>
+                </div>
+            </div>
+        </header>
+        <div class="featured-img" id="featured-img">
+            <a href="{% url 'detail' pokemon.id|add:-1 %}" class="arrow left-arrow" id="leftArrow">
+                <img src="{% static 'assets/chevron_left.svg' %}" alt="back">
+            </a>
+            <div class="detail-img-wrapper">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/{{ pokemon.id }}.svg" alt="{{ pokemon.name }}">
+            </div>
+            <a href="{% url 'detail' pokemon.id|add:1 %}" class="arrow right-arrow" id="rightArrow">
+                <img src="{% static 'assets/chevron_right.svg' %}" alt="forward">
+            </a>
+        </div>
+        <div class="detail-card-detail-wrapper" id="detail-card-detail-wrapper">
+            <div class="power-wrapper">
+                {% for type in pokemon.types %}
+                <p class="body3-fonts type {{ type.type.name }}">{{ type.type.name }}</p>
+                {% endfor %}
+            </div>
+            <p class="body2-fonts about-text">About</p>
+            <div class="pokemon-detail-wrapper">
+                <div class="pokemon-detail-wrap">
+                    <div class="pokemon-detail">
+                        <img src="{% static 'assets/weight.svg' %}" alt="weight">
+                        <p class="body3-fonts weight">{{ pokemon.weight }}</p>
+                    </div>
+                    <p class="caption-fonts">Weight</p>
+                </div>
+                <div class="pokemon-detail-wrap">
+                    <div class="pokemon-detail">
+                        <img src="{% static 'assets/height.svg' %}" alt="height" class="straighten">
+                        <p class="body3-fonts height">{{ pokemon.height }}</p>
+                    </div>
+                    <p class="caption-fonts">Height</p>
+                </div>
+                <div class="pokemon-detail-wrap">
+                    <div class="pokemon-detail move">
+                        {% for ability in pokemon.abilities %}
+                        <p class="body3-fonts">{{ ability.ability.name }}</p>
+                        {% endfor %}
+                    </div>
+                    <p class="caption-fonts">Move</p>
+                </div>
+            </div>
+            <p class="body3-fonts pokemon-description">{{ description }}</p>
+            <p class="body2-fonts about-text">Base Stats</p>
+            <div class="stats-wrapper">
+                {% for stat in pokemon.stats %}
+                <div class="stats-wrap" data-stat="{{ stat.stat.name }}">
+                    <p class="body3-fonts stats">{{ stat.stat.name|capfirst }}</p>
+                    <p class="body3-fonts">{{ stat.base_stat }}</p>
+                    <progress value="{{ stat.base_stat }}" max="100" class="progress-bar"></progress>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <img src="{% static 'assets/pokedex.svg' %}" alt="pokedex" class="detail-bg">
+    </main>
+</body>
+
+</html>
