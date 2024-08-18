@@ -14,7 +14,7 @@ Welcome to the **Django Pokédex**! This project is a simple web application bui
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/django-pokedex.git
+git clone https://github.com/Gourav9165/Pokedex-django.git
 cd django-pokedex
 ```
 
@@ -80,6 +80,3 @@ The detail page that shows the stats and information for a specific Pokémon.
 
 Feel free to fork this repository, create a feature branch, and submit a pull request. All contributions are welcome!
 
----
-
-Happy coding! 😄
