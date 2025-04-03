@@ -7,59 +7,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex</title>
+    <title>Pokedex - Modern Style</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        /* --- Base Styles & Variables --- */
+        :root {
+            --primary-color: #3B82F6; /* Blue */
+            --secondary-color: #F59E0B; /* Amber */
+            --background-start: #ECE9E6;
+            --background-end: #FFFFFF;
+            --card-bg-start: rgba(255, 255, 255, 0.6);
+            --card-bg-end: rgba(255, 255, 255, 0.3);
+            --text-dark: #1F2937; /* Dark Gray */
+            --text-light: #4B5563; /* Medium Gray */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --card-shadow-hover: rgba(0, 0, 0, 0.2);
+            --border-color: rgba(255, 255, 255, 0.4);
+            --accent-glow: rgba(59, 130, 246, 0.2); /* Blue Glow */
+        }
+
+        * {
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #e8eaf6;
+            padding: 40px 20px; /* Add padding around the content */
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* Align content to the top */
             align-items: center;
             min-height: 100vh;
             flex-direction: column;
+            color: var(--text-dark);
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        /* .container {
-            width: 90%;
-            max-width: 1200px;
-            background: linear-gradient(135deg, #ffffff, #b7b5b529);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            margin: 20px 0;
-            padding: 20px;
-        } */
+        /* --- Header Styling --- */
+        .header.home {
+            width: 95%;
+            max-width: 1100px; /* Max width for larger screens */
+            background: rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+            backdrop-filter: blur(12px); /* Glassmorphism effect */
+            -webkit-backdrop-filter: blur(12px); /* Safari support */
+            border-radius: 25px; /* Smoother corners */
+            box-shadow: 0 8px 32px 0 var(--shadow-color);
+            border: 1px solid var(--border-color);
+            padding: 15px 30px; /* Adjusted padding */
+            margin-bottom: 40px; /* Space below header */
+            position: sticky; /* Keep header visible */
+            top: 20px; /* Stick below top padding */
+            z-index: 1000; /* Ensure header is above content */
+            transition: all 0.3s ease;
+        }
 
-        .header {
-            text-align: center;
-            padding: 15px 0;
-            background: linear-gradient(135deg, #a6cdf457, #91b9dc);
-            color: #2c3e50;
-            border-radius: 20px;
+        .header .container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between; /* Space out logo and search */
             align-items: center;
-            padding: 15px 30px;
-            width: 90%;
+            width: 100%; /* Ensure container uses full header width */
         }
 
-        .header h1 {
-            font-size: 40px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            margin-top: -20px;
+        .header .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Space between logo and title */
         }
 
         .header .logo-wrapper img {
-            width: 120px;
-            margin-right: 10px;
+            width: 50px; /* Slightly smaller logo */
+            height: 50px;
+            animation: spin 10s linear infinite; /* Subtle spinning animation */
         }
 
+        .header h1 {
+            font-size: 2.2em; /* Responsive font size */
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0; /* Reset default margins */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Search Bar Styling --- */
         .header .search-wrapper {
             display: flex;
             align-items: center;
@@ -67,7 +98,6 @@
 
         .header .search-wrap {
             position: relative;
-            margin-right: 20px;
         }
 
         .header .search-icon,
@@ -76,111 +106,300 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
+            width: 20px; /* Consistent icon size */
+            height: 20px;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
         }
+         .header .search-wrap:hover .search-icon:not(:hover) { /* Only fade if not hovering icon itself */
+             opacity: 0.8;
+         }
+         .header .search-wrap:hover .search-close-icon:not(:hover) {
+             opacity: 0.8;
+         }
 
         .header .search-icon {
-            left: 10px;
+            left: 15px; /* Adjust position */
         }
 
         .header .search-close-icon {
-            right: 10px;
-            display: none;
+            right: 15px; /* Adjust position */
+            display: none; /* Keep JS control */
+            width: 16px; /* Make close icon slightly smaller */
+            height: 16px;
         }
 
         .header .search-input {
-            padding: 10px 40px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            padding: 12px 45px 12px 50px; /* Adjust padding for icons */
+            border: 1px solid transparent; /* Hide default border */
+            border-radius: 30px; /* Pill shape */
             outline: none;
-            width: 250px;
+            width: 280px; /* Fixed width or adjust as needed */
+            background-color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95em;
+            color: var(--text-light);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
 
-        .header .filter-wrapper p {
-            margin: 0;
-            font-size: 15px;
-            color: #2c3e50;
+        .header .search-input::placeholder {
+            color: var(--text-light);
+            opacity: 0.8;
         }
 
-        .header .filter-wrap {
+        .header .search-input:focus {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 4px var(--accent-glow), inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Focus glow */
+            width: 300px; /* Slightly expand on focus */
+        }
+
+        /* --- Main Content & Pokemon List --- */
+        .main {
+            width: 100%; /* Take full width */
             display: flex;
-            align-items: center;
-        }
-
-        .header .filter-wrap div {
-            margin-right: 10px;
-        }
-
-        .header .filter-wrap label {
-            margin-left: 5px;
-            cursor: pointer;
+            justify-content: center;
         }
 
         .pokemon-list {
-            padding: 20px 0;
-            text-align: center;
+            width: 95%;
+            max-width: 1200px; /* Wider max-width for list */
+            padding: 0; /* Remove default padding */
+        }
+
+        .pokemon-list > .container { /* Target the container directly inside pokemon-list */
+             padding: 0; /* Override any potential padding */
         }
 
         .list-wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            display: grid; /* Use Grid for better control */
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Responsive grid */
+            gap: 30px; /* Increased gap */
             justify-content: center;
+            padding: 20px 0; /* Padding top/bottom */
         }
 
+        /* --- Pokemon Card Styling --- */
         .list-item {
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, var(--card-bg-start), var(--card-bg-end));
+            backdrop-filter: blur(8px); /* Subtle glass effect on card */
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 20px; /* Consistent rounding */
+            box-shadow: 0 5px 15px var(--shadow-color);
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
             text-align: center;
-            width: 150px;
-            padding: 20px;
-            overflow: hidden;
+            padding: 25px 15px;
+            border: 1px solid var(--border-color);
+            overflow: hidden; /* Ensure content stays within bounds */
+            position: relative; /* For potential absolute positioning inside */
+            display: flex; /* Use flex for internal alignment */
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between; /* Space out elements vertically */
+            min-height: 240px; /* Ensure cards have a minimum height */
+            opacity: 0; /* Start hidden for animation */
+            animation: popIn 0.5s ease-out forwards;
+            /* Stagger animation - requires inline style or JS modification */
+            /* Example: animation-delay: calc(var(--animation-order, 0) * 50ms); */
+             animation-delay: calc({{ forloop.counter0 }} * 40ms); /* Django template stagger */
+
         }
 
         .list-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-8px) scale(1.04); /* Lift and slightly scale */
+            box-shadow: 0 12px 28px var(--card-shadow-hover);
+            border-color: rgba(255, 255, 255, 0.7);
         }
 
+        /* --- Card Content Styling --- */
         .number-wrap {
-            background-color: #ffcb05;
+            position: absolute; /* Position ID nicely */
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, var(--primary-color), #60A5FA); /* Blue gradient */
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
 
         .number-wrap p {
             margin: 0;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.8em;
+            color: white;
         }
+
+        .img-wrap {
+             margin-top: 30px; /* Space below the number */
+             margin-bottom: 15px;
+             flex-grow: 1; /* Allow image area to take space */
+             display: flex;
+             align-items: center;
+             justify-content: center;
+         }
 
         .img-wrap img {
             width: 100px;
             height: 100px;
+            object-fit: contain; /* Ensure image fits well */
+            transition: transform 0.4s ease;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1)); /* Subtle shadow for image */
         }
+
+        .list-item:hover .img-wrap img {
+            transform: scale(1.15); /* Slightly larger image zoom on hover */
+        }
+
+        .name-wrap {
+             margin-top: auto; /* Push name to bottom */
+             width: 100%;
+         }
 
         .name-wrap p {
-            margin: 10px 0 0;
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap; /* Prevent name wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis if name is too long */
+            padding: 0 5px; /* Padding in case of ellipsis */
         }
 
+        /* --- Not Found Message --- */
         #not-found-message {
-            display: none;
-            font-size: 20px;
-            color: #e74c3c;
-            margin-top: 20px;
+            display: none; /* Keep JS control */
+            font-size: 1.5em; /* Larger text */
+            color: var(--text-light);
+            margin-top: 40px;
+            text-align: center;
+            width: 100%;
+            padding: 30px;
+            font-weight: 600;
         }
+
+        /* --- Animations --- */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* --- Scrollbar Styling (Optional, Webkit browsers) --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background-start);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary-color), #60A5FA);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(#60A5FA, var(--primary-color));
+        }
+
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+             body {
+                 padding: 20px 10px;
+             }
+
+             .header.home {
+                 padding: 15px 20px;
+                 position: static; /* Disable sticky header on mobile */
+                 margin-bottom: 20px;
+             }
+
+            .header .container {
+                flex-direction: column; /* Stack logo/search on mobile */
+                gap: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header .search-input {
+                width: 100%; /* Full width search on mobile */
+                max-width: 300px; /* Limit max width */
+            }
+             .header .search-input:focus {
+                 width: 100%; /* Keep full width on focus */
+             }
+
+             .list-wrapper {
+                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Smaller cards on mobile */
+                 gap: 20px;
+             }
+
+             .list-item {
+                 padding: 20px 10px;
+                 min-height: 200px; /* Adjust min height */
+             }
+
+             .img-wrap img {
+                 width: 80px;
+                 height: 80px;
+             }
+
+             .name-wrap p {
+                 font-size: 1em;
+             }
+
+             #not-found-message {
+                 font-size: 1.2em;
+             }
+         }
+
+         @media (max-width: 480px) {
+              .list-wrapper {
+                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Even smaller cards */
+                 gap: 15px;
+             }
+              .list-item {
+                  min-height: 180px;
+              }
+             .img-wrap img {
+                 width: 70px;
+                 height: 70px;
+             }
+              .number-wrap {
+                  width: 30px;
+                  height: 30px;
+                  font-size: 0.7em;
+              }
+             .name-wrap p {
+                 font-size: 0.9em;
+             }
+         }
+
     </style>
 </head>
 
 <body>
+    <!-- Header remains unchanged -->
     <header class="header home">
         <div class="container">
             <div class="logo-wrapper">
@@ -190,18 +409,21 @@
             <div class="search-wrapper">
                 <div class="search-wrap">
                     <img src="{% static 'assets/search.svg' %}" alt="search icon" class="search-icon">
-                    <input type="text" class="search-input" placeholder="Search" id="search-input">
+                    <input type="text" class="search-input" placeholder="Search Pokémon by Name or ID" id="search-input"> <!-- Updated Placeholder -->
                     <img src="{% static 'assets/cross.svg' %}" alt="cross icon" class="search-close-icon" id="search-close-icon">
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- Main content remains unchanged -->
     <main class="main">
         <section class="pokemon-list">
             <div class="container">
                 <div class="list-wrapper" id="pokemon-list">
                     {% for pokemon in pokemons %}
-                    <div class="list-item" onclick="window.location.href='{% url 'detail' pokemon.id %}'" data-name="{{ pokemon.name }}" data-id="{{ pokemon.id }}">
+                    <!-- Added inline style for animation delay -->
+                    <div class="list-item" onclick="window.location.href='{% url 'detail' pokemon.id %}'" data-name="{{ pokemon.name }}" data-id="{{ pokemon.id }}" style="--animation-order: {{ forloop.counter0 }};">
                         <div class="number-wrap">
                             <p>#{{ pokemon.id }}</p>
                         </div>
@@ -218,41 +440,56 @@
             </div>
         </section>
     </main>
+
+    <!-- Script remains unchanged -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('search-input');
             const searchCloseIcon = document.getElementById('search-close-icon');
             const pokemonList = document.getElementById('pokemon-list');
+            const listItems = pokemonList.getElementsByClassName('list-item'); // Get static list initially
             const notFoundMessage = document.getElementById('not-found-message');
-            
+
             searchInput.addEventListener('input', function () {
-                const searchTerm = searchInput.value.toLowerCase();
-                const items = pokemonList.getElementsByClassName('list-item');
+                const searchTerm = searchInput.value.toLowerCase().trim(); // Trim whitespace
                 let found = false;
 
-                Array.from(items).forEach(item => {
+                // Iterate over the static list of items fetched initially
+                Array.from(listItems).forEach(item => {
                     const name = item.getAttribute('data-name').toLowerCase();
-                    const id = item.getAttribute('data-id');
+                    const id = item.getAttribute('data-id'); // ID search
+                    // Check if name OR id includes the search term
                     if (name.includes(searchTerm) || id.includes(searchTerm)) {
-                        item.style.display = '';
+                        item.style.display = ''; // Use default display (flex/grid item)
                         found = true;
                     } else {
                         item.style.display = 'none';
                     }
                 });
 
+                // Update not found message visibility
                 notFoundMessage.style.display = found ? 'none' : 'block';
-                searchCloseIcon.style.display = searchTerm ? 'block' : 'none';
+
+                // Update close icon visibility
+                searchCloseIcon.style.display = searchTerm ? 'inline' : 'none'; // Use inline for better alignment
             });
 
             searchCloseIcon.addEventListener('click', function () {
                 searchInput.value = '';
+                // Manually trigger the input event to re-filter
                 searchInput.dispatchEvent(new Event('input'));
             });
 
-                items.forEach(item => pokemonList.appendChild(item));
-            });
+            // --- Animation Staggering Logic ---
+            // The stagger effect is now handled by CSS using the inline style `animation-delay` set in the Django template.
+            // No additional JS is needed here for the stagger itself.
+
+            // Optional: Add a class to the body once animations might have finished to trigger other transitions if needed
+            // setTimeout(() => {
+            //    document.body.classList.add('animations-complete');
+            // }, listItems.length * 50 + 500); // Estimate based on number of items and animation duration/delay
+
+        });
     </script>
 </body>
-
 </html>
